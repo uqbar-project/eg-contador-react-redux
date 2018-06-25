@@ -144,7 +144,7 @@ class Contador extends Component {
 
 ## Acción eliminar log
 
-![image](images/ContadorReactRedux_LogContador.png)
+![image](images/ContadorReactRedux_DeleteLog.png)
 
 Dentro del componente LogRow (en el archivo _/src/componentes/logContador.js_) mapeamos el botón que elimina un log con la correspondiente función que despacha la acción de Redux:
 
@@ -179,3 +179,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(LogContador)
 ```
 
 Un último detalle, la función deleteLog se pasa desde el componente padre (LogContador) hacia el componente hijo (LogRow) para unificar el mapeo hacia las acciones que disparan los cambios en el store, gracias al manejo de referencias dinámico que tiene javascript (donde las funciones son un objeto más, tanto como un número o un string).
+
+# Testing
+
+TODO
