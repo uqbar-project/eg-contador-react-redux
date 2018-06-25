@@ -144,7 +144,7 @@ class Contador extends Component {
 
 ## Acción eliminar log
 
-![image](images/ContadorReactRedux_DeleteLog.png)
+![image](images/ContadorReactRedux_DeleteLog_1.png)
 
 Dentro del componente LogRow (en el archivo _/src/componentes/logContador.js_) mapeamos el botón que elimina un log con la correspondiente función que despacha la acción de Redux:
 
