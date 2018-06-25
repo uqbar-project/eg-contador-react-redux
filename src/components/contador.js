@@ -17,7 +17,7 @@ class Contador extends Component {
                         &nbsp;&nbsp;
                         <Label bsStyle="success">{this.props.value}</Label>
                         &nbsp;&nbsp;
-                    <Button bsStyle="primary" onClick={() => this.props.increment()}>+</Button>
+                        <Button bsStyle="primary" onClick={() => this.props.increment()}>+</Button>
                     </h3>
                 </Panel.Body>
             </Panel>
