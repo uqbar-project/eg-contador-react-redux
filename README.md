@@ -1,6 +1,8 @@
 
 # Contador en React Redux
 
+[![Build Status](https://travis-ci.org/uqbar-project/eg-contador-react-redux.svg?branch=master)](https://travis-ci.org/uqbar-project/eg-contador-react-redux)
+
 ![video](video/demo.gif)
 
 # La aplicación
