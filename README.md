@@ -265,3 +265,4 @@ it('cuando el usuario presiona el botón Delete Log se elimina un log', () => {
   expect(store.getState().logs.length).toBe(0)
 })
 ```
+
