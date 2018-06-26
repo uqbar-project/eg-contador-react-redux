@@ -152,7 +152,7 @@ Dentro del componente LogRow (en el archivo _/src/componentes/logContador.js_) m
 - al devolver un nuevo estado, se dispara el **render** del componente LogContador removiendo del DOM la fila de la tabla que contenía el log eliminado
 - en cuanto al componente Contador, no se dispara el **render** ya que el _value_ mapeado por la vista no se modificó (pueden corroborarlo insertando console.log en el método)
 
-````javascript
+```javascript
 export class LogContador extends Component {
 
     render() {
@@ -182,4 +182,86 @@ Un último detalle, la función deleteLog se pasa desde el componente padre (Log
 
 # Testing
 
-TODO
+El archivo de test no es fácil configurarlo, ya que estamos haciendo una prueba end-to-end desde la vista hacia todo el sistema de dispatch propio de Redux. Veamos:
+
+## Setup
+
+```javascript
+import React from 'react'
+import 'jest-enzyme'
+import { configure } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
+import { mount } from 'enzyme'
+import Contador from './components/contador'
+import LogContador from './components/logContador'
+import { createStore } from 'redux'
+import { increment } from './redux/actions'
+import { INCREMENT, reducerContador } from './redux/store'
+
+configure({ adapter: new Adapter() })
+
+let wrapperContador
+let store
+
+beforeEach(() => {
+  store = createStore(reducerContador, { value: 0, logs: [] })
+  wrapperContador = mount(<Contador store={store} />)
+})
+```
+
+En el setup creamos un store **real** (no mockeado), utilizando la misma función reductora para el contador, y el mismo valor inicial (que podríamos haber importado de una constante en una única definición). Esto es porque si mockeamos el store, no va a funcionar el test que verifique que al presionar el botón + se sume uno en el valor de la vista (ya que el mock no cambia el estado del store).
+
+El primer test es sencillo:
+
+```javascript
+it('el contador inicialmente está en 0', () => {
+  const label = wrapperContador.find('Label')
+  expect(label.text()).toBe("0")
+})
+```
+
+Dado que en lugar de la función shallow() estamos usando la función mount(), tenemos el componente HTML cargado en profundidad (no necesitamos forzar los componentes hijos con el mensaje dive()). Entonces podemos buscar el Label que contiene el valor inicialmente en 0 (un String, salvo que el lector lo quiera convertir a un número).
+
+El segundo test no es tan unitario: prueba que se presiona el botón +, eso mapea contra props.increment() que dispara la acción increment() hacia el store, que devuelve un nuevo estado y eso termina generando el render de la vista, por lo tanto esperamos que en el Label ahora esté el valor 1:
+
+```javascript
+it('cuando el usuario presiona el botón + el contador pasa a estar en 1', () => {
+  const btnPlus = wrapperContador.find('button#plus')
+  btnPlus.simulate('click')
+  const label = wrapperContador.find('Label')
+  expect(label.text()).toBe("1")
+})
+```
+
+La función increment() devuelve simplemente un objeto con el type correspondiente, es un test menor:
+
+```javascript
+it('acción de incrementar', () => {
+  expect(increment()).toEqual({ type: INCREMENT })
+})
+```
+
+Para chequear que al presionar el botón + tenemos un nuevo log, debemos preguntarle al store si tiene un log adicional, ya que la vista no tiene ningún control que muestre la cantidad de logs:
+
+```javascript
+it('cuando el usuario presiona el botón + se agrega un log', () => {
+  const btnPlus = wrapperContador.find('button#plus')
+  btnPlus.simulate('click')
+  expect(store.getState().logs.length).toBe(1)
+})
+```
+
+Y el último test es una prueba end-to-end bastante exhaustiva: el usuario presiona el botón +, eso además de modificar el valor agrega un log. Entonces podemos presionar el botón "Eliminar log" para luego chequear que la lista de logs queda vacía:
+
+```javascript
+it('cuando el usuario presiona el botón Delete Log se elimina un log', () => {
+  const btnPlus = wrapperContador.find('button#plus')
+  btnPlus.simulate('click')
+  const logs = store.getState().logs
+  expect(logs.length).toBe(1)
+  const logId = logs[0].id
+  const wrapperLogContador = mount(<LogContador store={store} />)
+  wrapperLogContador.find("button#delete_" + logId).simulate('click')
+  expect(store.getState().logs.length).toBe(0)
+})
+```

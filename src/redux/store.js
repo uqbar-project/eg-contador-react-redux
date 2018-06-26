@@ -5,7 +5,7 @@ export const INCREMENT = 'INCREMENT'
 export const DECREMENT = 'DECREMENT'
 export const DELETE_LOG = 'DELETE_LOG'
 
-const reducer = (state, action) => {
+export const reducerContador = (state, action) => {
     if (action.type === DELETE_LOG) {
         return {
             ...state,
@@ -28,4 +28,4 @@ const reducer = (state, action) => {
     return state
 }
 
-export default createStore(reducer, { value: 0, logs: [] })
+export default createStore(reducerContador, { value: 0, logs: [] })

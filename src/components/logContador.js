@@ -10,7 +10,7 @@ export class LogContador extends Component {
             <Panel>
                 <Panel.Heading>
                     Log de acciones
-            </Panel.Heading>
+                </Panel.Heading>
                 <Panel.Body>
                     <Table striped bordered condensed hover>
                         <thead>
@@ -51,7 +51,7 @@ class LogRow extends Component {
                 <td>{this.props.log.when.toLocaleString('es-AR')}</td>
                 <td>{this.props.log.type}</td>
                 <td align="center">
-                    <Button bsStyle="danger" onClick={() => this.props.deleteLog(this.props.log)} >
+                    <Button bsStyle="danger" id={"delete_" + this.props.log.id} onClick={() => this.props.deleteLog(this.props.log)} >
                         <Glyphicon glyph="erase" />
                     </Button>
                 </td>
