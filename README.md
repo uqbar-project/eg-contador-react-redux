@@ -17,9 +17,77 @@ El framework React Redux permite unificar el estado entre los componentes de una
 - acciones, que producen efectos colaterales sobre el estado
 - y funciones reductoras, que con cada acción que se produce en lugar de modificar directamente el estado devuelve uno nuevo
 
-La introducción más detallada puede verse en el ejemplo [del mundial 2018](https://github.com/uqbar-project/eg-mundial2018-react/tree/fase3).
 
-## Tutoriales de React Redux
+## Breve introducción a React Redux
+
+![image](images/redux-reactive.png)
+
+React redux agrega como conceptos:
+
+- el **store** o estado que deberá compartirse entre los componentes, es básicamente un objeto javascript
+- **actions**, que se ejecutan ante determinados eventos
+- las acciones no modifican directamente el estado, tenemos una indirección o **dispatch**
+- que concentra los cambios en una función **reducer** (la palabra reductora puede no decirnos nada, hasta que conozcamos la programación funcional y en particular la función fold), que recibe el estado actual, la información sobre la acción y devuelve un nuevo estado
+
+## Antes de comenzar, un poco de programación funcional
+
+En programación funcional, la función _reduce_ (que en otros lenguajes pueden encontrar como _inject_ o _fold_) permite resolver prácticamente cualquier solución que necesitemos con listas. 
+
+Así, para sumar una lista de números, podemos hacer:
+
+```javascript
+> [1, 2, 3, 4].reduce((acum, elem) => acum + elem, 0)
+10
+```
+
+¿Qué parámetros le pasamos a reduce?
+
+- el segundo parámetro es "la semilla", o valor inicial con el que vamos a trabajar
+- el primer parámetro es **la función reductora**, una función que recibe dos parámetros: el primero corresponde al valor "actual" de la reducción, y el segundo se completa con cada uno de los elementos de la lista. El resultado de la función (en este caso la suma) se devuelve valor a la siguiente iteración. Así los subtotales que se van formando son:
+
+```
+0   (semilla)
+0 (acum) + 1 (elem) => 1
+1 (acum) + 2 (elem) => 3 
+3 (acum) + 3 (elem) => 6
+6 (acum) + 4 (elem) => 10
+```
+
+10 es el valor final tras aplicar la reducción.
+
+De la misma manera podemos obtener la productoria de números:
+
+```javascript
+[1, 2, 3, 4].reduce((acum, elem) => acum * elem)
+24
+```
+
+E incluso podemos calcular el máximo de una lista de números:
+
+```javascript
+[1, 20, 13, 4].reduce((acum, elem) => Math.max(acum, elem))
+20
+```
+
+Pero _reduce_ no se aplica solo a listas, también lo podemos aplicar para cualquier objeto. Por ejemplo, si tenemos una persona **inmutable**, podemos definir una función _cumplirAnios_ que en lugar de actualizar a la persona, devuelva **una nueva persona** con la edad incrementada:
+
+```javascript
+> const rodri = { nombre: 'Rodrigo Grisolía', edad: 28 }
+> const cumplirAnios = (persona, cuantos) => { 
+    return { nombre: persona.nombre, edad: persona.edad + cuantos } 
+  }
+
+> cumplirAnios(rodri, 1)
+// devuelve --> {nombre: "Rodrigo Grisolía", edad: 29}
+```
+
+En el ejemplo de React redux vamos a hacer exactamente lo mismo.
+
+- _cumplirAnios_ es nuestra función reductora
+- _rodri_ (la persona), será el state original
+- y el evento cumplirAnios se va a disparar a partir de una acción, generando un nuevo state
+
+## Más tutoriales de React Redux
 
 Si querés ver un tutorial en castellano didáctico, te recomendamos [este link](https://www.youtube.com/watch?v=RZNNu2pO49g&t=458s) (es el primero de varios videos, luego youtube hace su gracia y te va linkeando los demás).
 
@@ -27,9 +95,9 @@ Si querés ver un tutorial en castellano didáctico, te recomendamos [este link]
 
 Tenemos tres componentes en nuestra aplicación:
 
-- Contador: el label que muestra el valor y los dos botones para sumar o restar ese valor
-- LogContador: el container general que genera la tabla y su encabezado, y trabaja con la lista de logs de las operaciones que se van produciendo
-- LogRow: el componente que sabe mostrar un log dentro de una tabla
+- **Contador:** el label que muestra el valor y los dos botones para sumar o restar ese valor
+- **LogContador:** el container general que genera la tabla y su encabezado, y trabaja con la lista de logs de las operaciones que se van produciendo
+- **LogRow:** el componente que sabe mostrar un log dentro de una tabla
 
 ![image](images/componentes.png)
 
