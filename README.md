@@ -11,7 +11,7 @@ El ejemplo consiste en un simple contador numérico, al que le podemos increment
 
 # React Redux
 
-El framework React Redux permite unificar el estado compartido de una aplicación a partir de
+El framework React Redux permite unificar el estado entre los componentes de una aplicación a partir de
 
 - un store, que representa ese estado compartido (una _shared memory_)
 - acciones, que producen efectos colaterales sobre el estado
