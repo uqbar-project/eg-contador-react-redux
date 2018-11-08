@@ -195,10 +195,26 @@ const mapDispatchToProps = dispatch => {
 export default connect(mapStateToProps, mapDispatchToProps)(Contador)
 ```
 
-Y en el componente LogContador mapearemos:
+En el componente LogContador mapearemos:
 
 - como **state del store** la propiedad logs
-- como **action**, un objeto que contiene el type DELETE_LOG, con un parámetro: el log que queremos eliminar
+- como **action**, un objeto que contiene el type DELETE_LOG, con un parámetro: el log que queremos eliminar. Entonces construimos una función deleteLog que en realidad va a despachar el deleteLog al store.
+
+```js
+const mapStateToProps = state => {
+    return {
+        logs: state.logs
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        deleteLog: (log) => dispatch(deleteLog(log))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LogContador)
+```
 
 ## Acción incrementar valor
 
@@ -244,20 +260,6 @@ export class LogContador extends Component {
         )
     }
 }
-
-const mapStateToProps = state => {
-    return {
-        logs: state.logs
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        deleteLog: (log) => dispatch(deleteLog(log))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LogContador)
 ```
 
 Un último detalle, la función deleteLog se pasa desde el componente padre (LogContador) hacia el componente hijo (LogRow) para unificar el mapeo hacia las acciones que disparan los cambios en el store, gracias al manejo de referencias dinámico que tiene javascript (donde las funciones son un objeto más, tanto como un número o un string).
