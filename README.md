@@ -11,12 +11,7 @@ El ejemplo consiste en un simple contador numérico, al que le podemos increment
 
 # React Redux
 
-El framework React Redux permite unificar el estado entre los componentes de una aplicación a partir de
-
-- un store, que representa ese estado compartido (una _shared memory_)
-- acciones, que producen efectos colaterales sobre el estado
-- y funciones reductoras, que con cada acción que se produce en lugar de modificar directamente el estado devuelve uno nuevo
-
+El framework React Redux permite unificar el estado entre los componentes de una aplicación.
 
 ## Breve introducción a React Redux
 
@@ -81,7 +76,7 @@ Pero _reduce_ no se aplica solo a listas, también lo podemos aplicar para cualq
 // devuelve --> {nombre: "Rodrigo Grisolía", edad: 29}
 ```
 
-En el ejemplo de React redux vamos a hacer exactamente lo mismo.
+En el ejemplo de React Redux vamos a hacer exactamente lo mismo.
 
 - _cumplirAnios_ es nuestra función reductora
 - _rodri_ (la persona), será el state original
@@ -179,9 +174,26 @@ export function deleteLog(log) {
 
 Mapearemos entonces en el componente contador:
 
-- como **state del store** la propiedad value
-- como **action**, un objeto que contiene el type INCREMENT, sin más parámetros
+- como **state del store** la propiedad value (no nos interesan los logs)
+- como **action**, las acciones para subir o bajar el contador (increment y decrement se crean como lambdas que disparan la acción de increment al store)
 
+
+```js
+const mapStateToProps = state => {
+    return {
+        value: state.value
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        increment: () => dispatch(increment()),
+        decrement: () => dispatch(decrement())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Contador)
+```
 
 Y en el componente LogContador mapearemos:
 
