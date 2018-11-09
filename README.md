@@ -46,7 +46,7 @@ const reducer = (state, action) => {
 }
 ```
 
-[what](https://media.giphy.com/media/pPhyAv5t9V8djyRFJH/giphy.gif)
+![what](https://media.giphy.com/media/pPhyAv5t9V8djyRFJH/giphy.gif)
 
 Tenemos una función **poco cohesiva**, porque básicamente maneja todos los cambios de estado de nuestro store. Hoy tiene 3 responsabilidades pero esto crece a medida que tenga nuevas funcionalidades para agregar.
 
@@ -163,4 +163,4 @@ Y como vemos la creación del store, así como los componentes React, quedan igu
 
 # Conclusiones
 
-De esta manera tenemos un conjunto de funciones reductoras más chicas, y el store trabaja con funciones que son polimórficas, lo que permite que la aplicación crezca sin que haya una función reductora que crezca en líneas desaforadamente.
+De esta manera tenemos un conjunto de funciones reductoras más chicas, y el store trabaja con funciones que son polimórficas, lo que permite que la aplicación crezca sin que haya una función reductora que crezca desaforadamente en cantidad de líneas.
