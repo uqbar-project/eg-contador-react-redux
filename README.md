@@ -46,7 +46,7 @@ const reducer = (state, action) => {
 }
 ```
 
-![what](https://media.giphy.com/media/pPhyAv5t9V8djyRFJH/giphy.gif)
+![what](video/what.gif)
 
 Tenemos una función **poco cohesiva**, porque básicamente maneja todos los cambios de estado de nuestro store. Hoy tiene 3 responsabilidades pero esto crece a medida que tenga nuevas funcionalidades para agregar.
 
