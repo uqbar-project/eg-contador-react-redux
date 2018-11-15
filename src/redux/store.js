@@ -1,11 +1,7 @@
 import { createStore } from 'redux'
 
-export const reducerContador = (state, action) => {
-    console.log(action)
-    if (action.reducer) {
-        return action.reducer(state)
-    }
-    return state
+export const reducerContador = (state, { reducer = (state) => state }) => {
+    return reducer(state)
 }
 
 export default createStore(reducerContador, 

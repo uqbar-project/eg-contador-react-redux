@@ -159,7 +159,41 @@ export const reducerContador = (state, action) => {
 export default createStore(reducerContador, { value: 0, logs: [] })
 ```
 
-Y como vemos la creación del store, así como los componentes React, quedan igual.
+La creación del store, así como los componentes React, quedan igual. Si bien la función reductora no usa el type para definir qué acción debe correr, la biblioteca Redux lo necesita (vamos a recibir un mensaje de error si intentamos eliminar la variable `type` del JSON que devuelven las acciones).
+
+# Un último refactor
+
+Desde la especificación ES6 de javascript, no solamente podemos referenciar con una variable a un objeto
+
+```js
+const obj = { b: 1, a: 'hola' }
+```
+
+sino que también podemos trabajar con variables dentro de la propia estructura del objeto que estamos manipulando (_destructuring_), de la siguiente manera:
+
+```js
+const { a } = { b: 1, a: 'hola' }
+```
+
+Eso permite que nos quedemos con la/s referencia/s que nos interesan y descartemos las demás. A partir de aquí podemos hacer
+
+```js
+a.length
+```
+
+porque a apunta al valor que tiene la variable `a` dentro del objeto `{ b: 1, a: 'hola' }`.
+
+Esto nos permite simplificar nuestra función reductora:
+
+- no nos interesa el type, entonces utilizamos el parámetro desestructurado apuntando a la referencia `reducer`
+- y si reducer es `undefined` (la primera vez, porque Redux no trabaja con esa idea como nosotros), le podemos proveer un valor default, que es una función que recibe un estado y devuelve ese mismo estado (no hace ninguna transformación)
+
+```js
+export const reducerContador = (state, { reducer = (state) => state }) => {
+    return reducer(state)
+}
+```
+
 
 # Conclusiones
 
