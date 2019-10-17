@@ -8,4 +8,7 @@ export class Log {
         this.id = lastIndex++
     }
 
+    static getLastIndex() {
+        return lastIndex
+    }
 }

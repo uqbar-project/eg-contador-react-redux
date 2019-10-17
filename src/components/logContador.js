@@ -1,62 +1,42 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { useContext } from 'react'
 import { Panel, Table, Button, Glyphicon } from 'react-bootstrap/lib'
-import { deleteLog } from '../redux/actions'
+import { Context } from '../Context'
 
-export class LogContador extends Component {
-
-    render() {
-        return (
-            <Panel>
-                <Panel.Heading>
-                    Log de acciones
-                </Panel.Heading>
-                <Panel.Body>
-                    <Table striped bordered condensed hover>
-                        <thead>
-                            <tr>
-                                <th>Cuándo</th>
-                                <th>Acción</th>
-                                <th />
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.props.logs.map((log) => <LogRow log={log} key={log.id} deleteLog={this.props.deleteLog} />)}
-                        </tbody>
-                    </Table>
-                </Panel.Body>
-            </Panel>
-        )
-    }
+const LogContador = () => {
+    const { deleteLog, logs } = useContext(Context)
+    return (
+        <Panel>
+            <Panel.Heading>
+                Log de acciones
+            </Panel.Heading>
+            <Panel.Body>
+                <Table striped bordered condensed hover>
+                    <thead>
+                        <tr>
+                            <th>Cuándo</th>
+                            <th>Acción</th>
+                            <th />
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {logs.map((log) => <LogRow log={log} key={log.id} deleteLog={deleteLog} />)}
+                    </tbody>
+                </Table>
+            </Panel.Body>
+        </Panel>
+    )
 }
+export default LogContador
 
-const mapStateToProps = state => {
-    return {
-        logs: state.logs
-    }
-}
+const LogRow = (props) =>
+    <tr>
+        <td>{props.log.when.toLocaleString('es-AR')}</td>
+        <td>{props.log.type}</td>
+        <td align="center">
+            <Button bsStyle="danger" id={"delete_" + props.log.id} onClick={() => props.deleteLog(props.log)} >
+                <Glyphicon glyph="erase" />
+            </Button>
+        </td>
+    </tr>
 
-const mapDispatchToProps = dispatch => {
-    return {
-        deleteLog: (log) => dispatch(deleteLog(log))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LogContador)
-
-class LogRow extends Component {
-    render() {
-        return (
-            <tr>
-                <td>{this.props.log.when.toLocaleString('es-AR')}</td>
-                <td>{this.props.log.type}</td>
-                <td align="center">
-                    <Button bsStyle="danger" id={"delete_" + this.props.log.id} onClick={() => this.props.deleteLog(this.props.log)} >
-                        <Glyphicon glyph="erase" />
-                    </Button>
-                </td>
-            </tr>
-        )
-    }
-}
 

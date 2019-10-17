@@ -1,29 +1,22 @@
 import React from 'react'
-import 'jest-enzyme'
 import { configure } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
-import { mount } from 'enzyme'
-import Contador from './components/contador'
-import LogContador from './components/logContador'
-import { createStore } from 'redux'
-import { increment } from './redux/actions'
-import { INCREMENT, reducerContador } from './redux/store'
+import { mount, shallow } from 'enzyme'
+import Context from './Context'
+import App from './App'
+import { Log } from './domain/log'
 
 configure({ adapter: new Adapter() })
 
 let wrapperContador
-let store
 
 beforeEach(() => {
-  store = createStore(reducerContador, { value: 0, logs: [] })
-  wrapperContador = mount(<Contador store={store} />)
+  wrapperContador = mount(<Context.Provider><App /> </Context.Provider>)
 })
+
 it('el contador inicialmente está en 0', () => {
   const label = wrapperContador.find('Label')
   expect(label.text()).toBe("0")
-})
-it('acción de incrementar', () => {
-  expect(increment()).toEqual({ type: INCREMENT })
 })
 it('cuando el usuario presiona el botón + el contador pasa a estar en 1', () => {
   const btnPlus = wrapperContador.find('button#plus')
@@ -40,15 +33,14 @@ it('cuando el usuario presiona el botón - el contador pasa a estar en -1', () =
 it('cuando el usuario presiona el botón + se agrega un log', () => {
   const btnPlus = wrapperContador.find('button#plus')
   btnPlus.simulate('click')
-  expect(store.getState().logs.length).toBe(1)
+  expect(wrapperContador.find('LogRow')).toHaveLength(1)
 })
+
 it('cuando el usuario presiona el botón Delete Log se elimina un log', () => {
   const btnPlus = wrapperContador.find('button#plus')
   btnPlus.simulate('click')
-  const logs = store.getState().logs
-  expect(logs.length).toBe(1)
-  const logId = logs[0].id
-  const wrapperLogContador = mount(<LogContador store={store} />)
-  wrapperLogContador.find("button#delete_" + logId).simulate('click')
-  expect(store.getState().logs.length).toBe(0)
+  expect(wrapperContador.find('LogRow')).toHaveLength(1)
+  const actualIndex = Log.getLastIndex() - 1
+  wrapperContador.find(`button#delete_${actualIndex}`).simulate('click')
+  expect(wrapperContador.find('LogRow')).toHaveLength(0)
 })
